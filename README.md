@@ -8,9 +8,14 @@ Make sure that you have LAN Control enabled in the YeeLight app, and take note o
 
 
 ## Requirements
+
 Requires python3 and the yeelight library. Lightify will display prompts if those are missing. 
 
-##Installation 
+## Installation 
+
 cd yourpowercordinstall/src/Powercord/plugins
+
 git clone https://github.com/GeoffreyWesthoff/lightify
+
 Restart your Discord
+

@@ -1,8 +1,41 @@
+/* eslint-disable no-mixed-operators */
 const { Plugin } = require('powercord/entities');
 const { getModule } = require('powercord/webpack');
 const { inject } = require('powercord/injector');
 const { exec } = require('child_process');
 const Settings = require('./Settings');
+
+function hexToHSL (hex) {
+  const result = (/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i).exec(hex);
+  let r = parseInt(result[1], 16);
+  let g = parseInt(result[2], 16);
+  let b = parseInt(result[3], 16);
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h,
+    s;
+  const l = (max + min) / 2;
+  if (max === min) {
+    h = s = 0; // achromatic
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  const HSL = {};
+  HSL.h = Math.round(h * 65535);
+  HSL.s = Math.round(s * 65535);
+  HSL.l = Math.round(l * 65535);
+  return HSL;
+}
 
 function _pulse (pyName, settings) {
   if (settings.get('YeeLight', false) === true) {
@@ -12,7 +45,17 @@ function _pulse (pyName, settings) {
     const g =  parseInt(result[2], 16);
     const b =  parseInt(result[3], 16);
     const color = `${r},${g},${b}`;
-    exec(`${pyName} ${__dirname}/pulse_yeelight.py ${settings.get('BulbIP', '192.168.0.100')} ${color} ${settings.get('PulseDuration', 250)} ${settings.get('YeeAutoOn', true)} ${settings.get('BulbBright', 100)}`);
+    exec(`${pyName} ${__dirname}/pulse_yeelight.py ${settings.get('BulbIP', '192.168.0.100')} ${color} ${settings.get('PulseDuration', 250)} ${settings.get('AutoOn', true)} ${settings.get('BulbBright', 100)}`);
+  }
+  if (settings.get('Lifx', false) === true) {
+    const hsl = hexToHSL(settings.get('BulbColor', '#7289DA'));
+    const name = settings.get('LifxName', 'MyCeilingLight');
+    console.log(hsl.h, hsl.s, hsl.l);
+    exec(`${pyName} ${__dirname}/pulse_lifx.py ${name} ${hsl.h},${hsl.s},${hsl.l} ${settings.get('PulseDuration', 250)} ${settings.get('AutoOn', true)}`, (error, stdout, stderr) => {
+      console.log(stdout);
+      console.log(error);
+      console.log(stderr);
+    });
   }
 }
 
@@ -76,6 +119,11 @@ module.exports = class Lightify extends Plugin {
       }
     });
     exec(`${pyName} -c "import yeelight"`, (error, stdout, stderr) => {
+      if (stderr || stdout) {
+        _needsDeps(pyName);
+      }
+    });
+    exec(`${pyName} -c "import lifxlan"`, (error, stdout, stderr) => {
       if (stderr || stdout) {
         _needsDeps(pyName);
       }

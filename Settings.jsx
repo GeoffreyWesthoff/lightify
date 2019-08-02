@@ -15,9 +15,16 @@ module.exports = class Settings extends React.Component {
           Yeelight
         </SwitchItem>
         <SwitchItem
+          note={'Use Lifx lights with Lightify'}
+          value={getSetting('Lifx', false)}
+          onChange={() => toggleSetting('Lifx')}
+        >
+          Lifx
+        </SwitchItem>
+        <SwitchItem
           note={'Turn on the light if the light is off'}
-          value={getSetting('YeeAutoOn', true)}
-          onChange={() => toggleSetting('YeeAutoOn')}
+          value={getSetting('AutoOn', true)}
+          onChange={() => toggleSetting('AutoOn')}
         >
           Auto-On
         </SwitchItem>
@@ -26,15 +33,28 @@ module.exports = class Settings extends React.Component {
           value={getSetting('BulbIP', '192.168.0.100')}
           onChange={val => updateSetting('BulbIP', val)}
         >
-          Lamp IP
+          Yeelight Device IP
         </TextInput>
-
+        <TextInput
+          note={'Enter the device name of the lamp you want to pulse!'}
+          value={getSetting('LifxName', 'MyCeilingLight')}
+          onChange={val => updateSetting('LifxName', val)}
+        >
+          Lifx Device Name
+        </TextInput>
+        <TextInput
+          note={'Set the brightness of the YeeLight light when it\'s pulsed.'}
+          value={getSetting('BulbBright', 100)}
+          onChange={(val) => updateSetting('BulbBright', (Number(val) && Number(val) >= 1) ? Number(val) : 1, 100)}
+        >
+          YeeLight Brightness
+        </TextInput>
         <TextInput
           note={'Set the color you want the light to flash when you get mentioned. For example, #00ff00 would make it green.'}
           value={getSetting('BulbColor', '#7289DA')}
           onChange={val => updateSetting('BulbColor', val)}
         >
-          YeeLight Lamp Color
+          Lamp Color
         </TextInput>
         <TextInput
           note={'Set the time the light needs to stay the mention color for when you are mentioned.'}
@@ -42,13 +62,6 @@ module.exports = class Settings extends React.Component {
           onChange={(val) => updateSetting('BulbDuration', (Number(val) && Number(val) >= 1) ? Number(val) : 1)}
         >
           Pulse Duration
-        </TextInput>
-        <TextInput
-          note={'Set the brightness of the light when it\'s pulsed.'}
-          value={getSetting('BulbBright', 100)}
-          onChange={(val) => updateSetting('BulbBright', (Number(val) && Number(val) >= 1) ? Number(val) : 1, 100)}
-        >
-          Brightness
         </TextInput>
       </div>
     );

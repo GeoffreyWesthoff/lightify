@@ -4,6 +4,5 @@
   "description": "Pulse a YeeLight smart light when you are mentioned",
   "author": "Geoffrey Westhoff (Auxim#0001)",
   "license": "MIT",
-  "dependencies": ["pc-announcements"],
-  "permissions": "ext_api"
+  "dependencies": ["pc-announcements"]
 }

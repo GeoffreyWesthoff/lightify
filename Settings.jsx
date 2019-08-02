@@ -29,14 +29,14 @@ module.exports = class Settings extends React.Component {
           Auto-On
         </SwitchItem>
         <TextInput
-          note={'Set the IP address of the light you want to use!'}
+          note={'Set the IP address of the YeeLight light you want to use!'}
           value={getSetting('BulbIP', '192.168.0.100')}
           onChange={val => updateSetting('BulbIP', val)}
         >
           Yeelight Device IP
         </TextInput>
         <TextInput
-          note={'Enter the device name of the lamp you want to pulse!'}
+          note={'Enter the device name of the Lifx lamp you want to pulse!'}
           value={getSetting('LifxName', 'MyCeilingLight')}
           onChange={val => updateSetting('LifxName', val)}
         >

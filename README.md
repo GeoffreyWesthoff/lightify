@@ -2,14 +2,16 @@
 
 A plugin to flash your lights when you get mentioned on Discord
 
-At this time, only YeeLight lights are supported. Lifx light support will be added in the future. Philips Hue unknown, I don't have that type of smart lighting. 
+Lifx and YeeLight smart lights are currently supported. 
 
-Make sure that you have LAN Control enabled in the YeeLight app, and take note of the light's IP address under device info, you will need it later. 
+
+If you use YeeLight, make sure that you have LAN Control enabled in the YeeLight app, and take note of the light's IP address under device info, you will need it later. 
+For Lifx, you only need the device name.
 
 
 ## Requirements
 
-Requires python3 and the yeelight library. Lightify will display prompts if those are missing. 
+Requires python3 and the yeelight and lifxlan libraries. Lightify will display prompts if those are missing. 
 
 ## Installation 
 
